@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>支持力破壊の3つの形態 — インタラクティブ</title>
+<link rel="stylesheet" href="css/style.css">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script" async></script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+</head>
+<body>
+<header>
+  <h1>支持力破壊の3つの形態 — 全般せん断・局部せん断・パンチング</h1>
+  <p class="hint">
+    Vesic (1973) の分類に従い、相対密度 <span class="ml">$D_r$</span>（密度・強度・剛性の代理指標）で
+    破壊形態が <strong>全般せん断 → 局部せん断 → パンチング</strong> と移り変わる様子を、
+    <strong>荷重-沈下曲線の形</strong>と<strong>すべり面の地表への到達状況</strong>で対比する。
+    構成則は解かず、教科書的な定性挙動を再現する概念モデル。
+    <span class="ml">$\phi'$</span> は <span class="ml">$D_r$</span> から推定（<span class="ml">$\phi' \approx 28^\circ + 14^\circ D_r$</span>）。
+  </p>
+</header>
+
+<section class="controls">
+  <div class="seg">
+    <button id="view-explore" class="seg-btn">探索（Dr で形態が変化）</button>
+    <button id="view-compare" class="seg-btn">3形態を並べて比較</button>
+  </div>
+
+  <div class="ctl-row" id="dr-row">
+    <label>相対密度 <span class="ml">$D_r$</span> = <output id="dr-out">0.85</output>
+      <span class="hint-inline">(0=緩い→パンチング, 1=密→全般せん断)</span></label>
+    <input type="range" id="dr" min="0.05" max="1" step="0.01" value="0.85">
+    <span id="mode-badge" class="badge">全般せん断破壊</span>
+  </div>
+
+  <div class="ctl-row" id="presets-row">
+    <span class="ctl-label">例題1 プリセット:</span>
+    <span id="presets"></span>
+  </div>
+
+  <div class="ctl-row">
+    <button id="play" class="play-btn">▶ 載荷アニメーション</button>
+    <label class="t-label">載荷の進行</label>
+    <input type="range" id="t" min="0" max="1" step="0.005" value="0">
+  </div>
+  <p class="qu" id="qu-out"></p>
+</section>
+
+<section class="stage">
+  <div class="scene-col">
+    <div id="single-wrap" class="canvas-card">
+      <canvas id="canvas-single"></canvas>
+    </div>
+    <div id="compare-wrap" class="compare-grid">
+      <div class="canvas-card"><canvas id="canvas-general"></canvas></div>
+      <div class="canvas-card"><canvas id="canvas-local"></canvas></div>
+      <div class="canvas-card"><canvas id="canvas-punching"></canvas></div>
+    </div>
+  </div>
+  <div class="plot-col">
+    <div id="plot"></div>
+    <p class="note">
+      荷重-沈下曲線（沈下を下向きにとる慣例表示）。曲線は各形態の標準的な大きさ
+      （全般 <span class="ml">$D_r=0.85$</span> / 局部 <span class="ml">$0.50$</span> / パンチング <span class="ml">$0.20$</span>）で固定し、
+      ●印が現在の載荷段階。全般は明確なピーク後に軟化、局部はピークが不明瞭、パンチングは単調漸増。
+    </p>
+  </div>
+</section>
+
+<footer>
+  地盤工学講義 b02 第8回「支持力（古典理論）」インタラクティブ教材 ／
+  分類: Vesic, A.S. (1973) "Analysis of ultimate loads of shallow foundations", JSMFD, ASCE.
+</footer>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
