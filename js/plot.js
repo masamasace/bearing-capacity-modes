@@ -30,10 +30,19 @@ export function initPlot(el, modes, Dr) {
       marker: { color: MODES[mode].color, size: 10, line: { color: '#fff', width: 1.5 } },
     });
   });
+  if (typeof Plotly === 'undefined') { showPlotFallback(el); return; }
   Plotly.newPlot(el, traces, structuredClone(LAYOUT_BASE), CONFIG);
 }
 
+function showPlotFallback(el) {
+  el.innerHTML = '<div style="padding:16px;font-size:.85rem;color:#555;line-height:1.6">'
+    + '荷重-沈下曲線の描画ライブラリ (Plotly) を読み込めませんでした。'
+    + 'ネットワーク接続を確認してください（CDN: cdn.jsdelivr.net）。'
+    + '左側の地盤断面アニメーションはオフラインでも動作します。</div>';
+}
+
 export function updatePlot(el, modes, Dr, t) {
+  if (typeof Plotly === 'undefined') return;
   const sPct = settlementPct(t);
   const xs = [], ys = [];
   // 曲線再計算（Dr 変化に追従）
